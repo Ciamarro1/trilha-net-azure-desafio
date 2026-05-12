@@ -65,4 +65,52 @@ Este é um diagrama do ambiente que deverá ser montado no Microsoft Azure, util
 
 
 ## Solução
-O código está pela metade, e você deverá dar continuidade obedecendo as regras descritas acima, para que no final, tenhamos um programa funcional. Procure pela palavra comentada "TODO" no código, em seguida, implemente conforme as regras acima, incluindo a sua publicação na nuvem.
+O código foi completamente implementado conforme as regras do desafio, incluindo as operações CRUD com Entity Framework Core e o log no Azure Table Storage.
+
+## Configuração e Execução
+
+Para executar o projeto localmente e testar 100% de suas funcionalidades, é necessário configurar as strings de conexão do banco de dados (Azure SQL ou Local) e do Storage Account (Azure Storage Account ou Azurite local).
+
+Por questões de segurança, **credenciais reais não foram versionadas no repositório**. 
+O arquivo `appsettings.json` está configurado com strings vazias e o projeto irá falhar nas operações de banco de dados e Table Storage até que elas sejam preenchidas.
+
+### Passo a passo:
+
+1. Renomeie o arquivo `appsettings.Example.json` para `appsettings.json` (ou apenas copie o conteúdo e preencha as chaves vazias no `appsettings.json` existente):
+
+```json
+"ConnectionStrings": {
+  "ConexaoPadrao": "SUA_CONNECTION_STRING_DO_AZURE_SQL",
+  "SAConnectionString": "SUA_CONNECTION_STRING_DO_STORAGE_ACCOUNT",
+  "AzureTableName": "FuncionarioLog"
+}
+```
+
+2. Restaure as dependências do projeto:
+```bash
+dotnet restore
+```
+
+3. Compile o projeto:
+```bash
+dotnet build
+```
+
+4. Aplique as migrations no banco de dados (certifique-se de que a string de conexão do banco `ConexaoPadrao` seja válida):
+```bash
+dotnet ef database update
+```
+
+5. Inicie a aplicação:
+```bash
+dotnet run
+```
+
+6. Acesse a documentação da API (Swagger) pelo navegador em:
+```
+http://localhost:5000/swagger
+```
+*(A porta pode variar dependendo da configuração da sua máquina, verifique o terminal após rodar o dotnet run).*
+
+### Observação importante
+A aplicação compila e a interface do Swagger pode ser acessada normalmente mesmo sem as strings de conexão preenchidas, porém qualquer requisição aos endpoints resultará em erro caso a comunicação com o Banco de Dados ou o Azure Table Storage não esteja configurada.
